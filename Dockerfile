@@ -25,15 +25,26 @@ RUN yum install -y java-1.8.0-openjdk
 
 # Install Maven 3.3.9
 RUN cd /opt \
- && wget http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz \
- && wget http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz.sha1 \
+ && curl -fsSLO http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz \
+ && curl -fsSLO http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz.sha1 \
  && export MVN_SHA1=$(cat apache-maven-3.3.9-bin.tar.gz.sha1) \
  && echo "${MVN_SHA1} apache-maven-3.3.9-bin.tar.gz" | sha1sum --check - \
  && tar xzf apache-maven-3.3.9-bin.tar.gz \
  && rm apache-maven-3.3.9-bin.tar.gz apache-maven-3.3.9-bin.tar.gz.sha1 \
  && ln -s apache-maven-3.3.9 maven \
  && echo 'export M2_HOME=/opt/maven' > /etc/profile.d/maven.sh \
- && echo 'PATH=${M2_HOME}/bin:${PATH}' >> /etc/profile.d/maven.sh
+ && echo 'PATH=${PATH}:${M2_HOME}/bin' >> /etc/profile.d/maven.sh
+
+# Install gradle
+# Using a hard coded checksum because no download checksum available
+RUN cd /opt \
+ && curl -fsSLO https://services.gradle.org/distributions/gradle-3.5-all.zip \
+ && echo "6c10209bd7ba0a2dd1191ad97e657c929d38f676 gradle-3.5-all.zip" | sha1sum --check - \
+ && unzip -q gradle-3.5-all.zip \
+ && rm gradle-3.5-all.zip \
+ && ln -s gradle-3.5 gradle \
+ && echo 'export GRADLE_HOME=/opt/gradle' > /etc/profile.d/gradle.sh \
+ && echo 'export PATH=${PATH}:${GRADLE_HOME}/bin' >> /etc/profile.d/gradle.sh
 
 ## Install pip
 #RUN apt-get install -y python-pip python-dev build-essential && \
@@ -62,30 +73,10 @@ RUN export TERM=xterm \
  && sed -i 's/# CASE_SENSITIVE="true"/CASE_SENSITIVE="true"/g' ~/.zshrc \
  && sudo rm /tmp/install_ohmyzsh.sh /tmp/aaron8bit.zsh-theme
 
-#COPY install_rvm.sh gradle-3.3-all.zip /tmp/
-#
-## Install rvm
-#RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-## why does ruby hate zsh? bash works fine...
-#RUN cat /tmp/install_rvm.sh | bash -s stable --ruby-2.3.1 && \
-#  echo "# Source rvm" >> ~/.zshrc && \
-#  echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc && \
-#  sudo rm /tmp/install_rvm.sh
-#
-### Install and configure ruby-2.3.1
-##RUN source ~/.rvm/scripts/rvm && \
-##  rvm install ruby-2.3.1 && \
-##  rvm --default use ruby-2.3.1 && \
-##  gem install bundler pry rspec guard rubocop && \
-##  rvm get stable --auto-dotfiles
-##
-### Install gradle
-### This should check the download, md5 or something
-##RUN unzip /tmp/gradle-3.3-all.zip -d ~/ && \
-##  mv ~/gradle-3.3 ~/.gradle-3.3 && \
-##  echo "# Gradle config" >> ~/.zshrc && \
-##  echo "export GRADLE_HOME=~/.gradle-3.3" >> ~/.zshrc && \
-##  echo "export PATH=$PATH:$GRADLE_HOME/bin" >> ~/.zshrc && \
-##  sudo rm /tmp/gradle-3.3-all.zip
-##
-#
+# Install rvm
+# Why does the rvm install hate zsh? bash works fine...
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
+ && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop \
+ && source ~/.rvm/scripts/rvm \
+ && rvm get stable --auto-dotfiles
+
