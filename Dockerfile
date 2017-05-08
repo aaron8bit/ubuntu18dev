@@ -77,6 +77,7 @@ RUN export TERM=xterm \
 # Why does the rvm install hate zsh? bash works fine...
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
  && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop \
- && source ~/.rvm/scripts/rvm \
- && rvm get stable --auto-dotfiles
+ && echo >> ~/.zshrc \
+ && echo "# Source rvm" >> ~/.zshrc \
+ && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
 
