@@ -46,6 +46,19 @@ RUN cd /opt \
  && echo 'export GRADLE_HOME=/opt/gradle' > /etc/profile.d/gradle.sh \
  && echo 'export PATH=${PATH}:${GRADLE_HOME}/bin' >> /etc/profile.d/gradle.sh
 
+# Install Terraform
+RUN cd /opt \
+ && curl -fsSLO https://releases.hashicorp.com/terraform/0.9.4/terraform_0.9.4_linux_amd64.zip \
+ && curl -fsSLO https://releases.hashicorp.com/terraform/0.9.4/terraform_0.9.4_SHA256SUMS \
+ && grep linux_amd64 terraform_0.9.4_SHA256SUMS | sha256sum --check - \
+ && mkdir terraform_0.9.4 \
+ && unzip -q terraform_0.9.4_linux_amd64.zip -d terraform_0.9.4/ \
+ && chmod -R 755 terraform_0.9.4/ \
+ && ln -s terraform_0.9.4 terraform \
+ && rm terraform_0.9.4_linux_amd64.zip terraform_0.9.4_SHA256SUMS \
+ && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
+ && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
+
 ## Install pip
 #RUN apt-get install -y python-pip python-dev build-essential && \
 #  pip install --upgrade pip && \
@@ -75,6 +88,7 @@ RUN export TERM=xterm \
 
 # Install rvm
 # Why does the rvm install hate zsh? bash works fine...
+# TODO: Make this a multi-user install and put source into /etc/profile.d/
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
  && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop \
  && echo >> ~/.zshrc \
