@@ -46,6 +46,19 @@ RUN cd /opt \
  && echo 'export GRADLE_HOME=/opt/gradle' > /etc/profile.d/gradle.sh \
  && echo 'export PATH=${PATH}:${GRADLE_HOME}/bin' >> /etc/profile.d/gradle.sh
 
+# Install Vault
+RUN cd /opt \
+ && curl -fsSLO https://releases.hashicorp.com/terraform/0.7.2/vault_0.7.2_linux_amd64.zip \
+ && curl -fsSLO https://releases.hashicorp.com/terraform/0.7.2/vault_0.7.2_SHA256SUMS \
+ && grep linux_amd64 vault_0.7.2_SHA256SUMS | sha256sum --check - \
+ && mkdir vault_0.7.2 \
+ && unzip -q vault_0.7.2_linux_amd64.zip -d vault_0.7.2/ \
+ && chmod -R 755 vault_0.7.2/ \
+ && ln -s vault_0.7.2 vault \
+ && rm vault_0.7.2_linux_amd64.zip vault_0.7.2_SHA256SUMS \
+ && echo 'export VAULT_HOME=/opt/vault' > /etc/profile.d/vault.sh \
+ && echo 'PATH=${PATH}:${VAULT_HOME}' >> /etc/profile.d/vault.sh
+
 # Install Terraform
 RUN cd /opt \
  && curl -fsSLO https://releases.hashicorp.com/terraform/0.9.4/terraform_0.9.4_linux_amd64.zip \
@@ -82,6 +95,7 @@ COPY install_ohmyzsh.sh aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
 RUN export TERM=xterm \
  && /tmp/install_ohmyzsh.sh \
  && cp /tmp/aaron8bit.zsh-theme ~/.oh-my-zsh/themes/ \
+ && cp /tmp/aaron8bit2.zsh-theme ~/.oh-my-zsh/themes/ \
  && sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="aaron8bit2"/g' ~/.zshrc \
  && sed -i 's/# CASE_SENSITIVE="true"/CASE_SENSITIVE="true"/g' ~/.zshrc \
  && sudo rm /tmp/install_ohmyzsh.sh /tmp/aaron8bit.zsh-theme /tmp/aaron8bit2.zsh-theme
