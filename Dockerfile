@@ -63,15 +63,15 @@ USER aja
 # Setup oh-my-zsh
 # curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o install_ohmyzsh.sh
 # chmod 755 install_ohmyzsh.sh
-COPY install_ohmyzsh.sh aaron8bit.zsh-theme /tmp/
+COPY install_ohmyzsh.sh aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
 
 ## the install exits with 1 but seems to work fine
 RUN export TERM=xterm \
  && /tmp/install_ohmyzsh.sh \
  && cp /tmp/aaron8bit.zsh-theme ~/.oh-my-zsh/themes/ \
- && sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="aaron8bit"/g' ~/.zshrc \
+ && sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="aaron8bit2"/g' ~/.zshrc \
  && sed -i 's/# CASE_SENSITIVE="true"/CASE_SENSITIVE="true"/g' ~/.zshrc \
- && sudo rm /tmp/install_ohmyzsh.sh /tmp/aaron8bit.zsh-theme
+ && sudo rm /tmp/install_ohmyzsh.sh /tmp/aaron8bit.zsh-theme /tmp/aaron8bit2.zsh-theme
 
 # Install rvm
 # Why does the rvm install hate zsh? bash works fine...
