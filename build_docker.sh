@@ -16,5 +16,9 @@ ${THIS_DIRECTORY}/get_files.sh ${THIS_DIRECTORY}
 docker build -t ${IMAGE}:${IMAGE_TAG} ${THIS_DIRECTORY}
 
 if [[ $? -eq 0 ]]; then
+  echo "Created new image: ${IMAGE}:${IMAGE_TAG}"
+  docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:${VERSION}
+  echo "Tagged image as:   ${IMAGE}:${VERSION}"
   docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:latest
+  echo "Tagged image as:   ${IMAGE}:latest"
 fi
