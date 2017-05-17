@@ -1,0 +1,5 @@
+*.zip
+*.gz
+*.sha1
+*.md5
+*_SHA256SUMS
