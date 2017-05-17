@@ -11,6 +11,8 @@ VERSION=$(cat ${THIS_DIRECTORY}/.version)
 DATE_STAMP=$(date +%Y%m%d-%H%M)
 IMAGE_TAG="${VERSION}-${DATE_STAMP}"
 
+${THIS_DIRECTORY}/get_files.sh ${THIS_DIRECTORY}
+
 docker build -t ${IMAGE}:${IMAGE_TAG} ${THIS_DIRECTORY}
 
 if [[ $? -eq 0 ]]; then
