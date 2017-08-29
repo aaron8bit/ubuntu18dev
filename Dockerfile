@@ -64,9 +64,9 @@ RUN cd /opt \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
 ## Install pip
-#RUN apt-get install -y python-pip python-dev build-essential && \
-#  pip install --upgrade pip && \
-#  pip install --upgrade virtualenv
+RUN yum install -y python-pip python34-pip
+  #pip install --upgrade pip && \
+  #pip install --upgrade virtualenv
 
 # Use zsh while running commands
 SHELL ["/bin/zsh", "-c"]
@@ -91,9 +91,9 @@ RUN export TERM=xterm \
 # Install rvm
 # Why does the rvm install hate zsh? bash works fine...
 # TODO: Make this a multi-user install and put source into /etc/profile.d/
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
- && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop \
- && echo >> ~/.zshrc \
- && echo "# Source rvm" >> ~/.zshrc \
- && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
+#RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
+# && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop
+#RUN echo >> ~/.zshrc \
+# && echo "# Source rvm" >> ~/.zshrc \
+# && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
 
