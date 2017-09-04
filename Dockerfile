@@ -64,15 +64,15 @@ RUN cd /opt \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
 ## Install pip
-RUN yum install -y python-pip python34-pip
-  #pip install --upgrade pip && \
-  #pip install --upgrade virtualenv
+RUN yum install -y python-pip python34-pip \
+ && pip install --upgrade pip \
+ && pip install --upgrade virtualenv
 
 # Use zsh while running commands
 SHELL ["/bin/zsh", "-c"]
 
-RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aja -s /bin/zsh -m aja && \
-  echo 'aja ALL=NOPASSWD:ALL' >> /etc/sudoers
+RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aja -s /bin/zsh -m aja \
+ && echo 'aja ALL=NOPASSWD:ALL' >> /etc/sudoers
 
 # Everything else should be non-root
 USER aja
@@ -96,4 +96,10 @@ RUN export TERM=xterm \
 #RUN echo >> ~/.zshrc \
 # && echo "# Source rvm" >> ~/.zshrc \
 # && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
+
+# Install AWS CLI tools
+RUN pip install awscli --upgrade --user \
+ && echo "# User specific environment and startup programs" >> ~/.zshrc \
+ && echo "PATH=$PATH:$HOME/.local/bin:$HOME/bin" >> ~/.zshrc \
+ && echo "export PATH" >> ~/.zshrc
 
