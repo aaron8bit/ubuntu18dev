@@ -100,6 +100,6 @@ RUN export TERM=xterm \
 # Install AWS CLI tools
 RUN pip install awscli --upgrade --user \
  && echo "# User specific environment and startup programs" >> ~/.zshrc \
- && echo "PATH=$PATH:$HOME/.local/bin:$HOME/bin" >> ~/.zshrc \
+ && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
  && echo "export PATH" >> ~/.zshrc
 
