@@ -7,14 +7,16 @@ RUN yum updateinfo -y \
  && yum install -y @base
 
 # Install some basic tools
-RUN yum install -y zsh \
-                   tmux \
-                   git \
-                   sudo \
-                   docker
+RUN yum install -y \
+  zsh \
+  tmux \
+  git \
+  sudo \
+  docker \
+  jq
 
 # Add EPEL Repos
-RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm \
+RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm \
  && yum updateinfo
 
 # Install Ansible
@@ -88,18 +90,24 @@ RUN export TERM=xterm \
  && sed -i 's/# CASE_SENSITIVE="true"/CASE_SENSITIVE="true"/g' ~/.zshrc
 # && sudo rm /tmp/install_ohmyzsh.sh /tmp/aaron8bit.zsh-theme /tmp/aaron8bit2.zsh-theme
 
-# Install rvm
-# Why does the rvm install hate zsh? bash works fine...
-# TODO: Make this a multi-user install and put source into /etc/profile.d/
-#RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
-# && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop
-#RUN echo >> ~/.zshrc \
-# && echo "# Source rvm" >> ~/.zshrc \
-# && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
-
 # Install AWS CLI tools
 RUN pip install awscli --upgrade --user \
  && echo "# User specific environment and startup programs" >> ~/.zshrc \
  && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
  && echo "export PATH" >> ~/.zshrc
+
+# Install rvm
+# Why does the rvm install hate zsh? bash works fine...
+# TODO: Make this a multi-user install and put source into /etc/profile.d/
+RUN gpg --keyserver hkp://keys.gnupg.net \
+        --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+ && curl -sSL https://get.rvm.io | bash -s stable
+RUN bash -l -c "rvm install ruby-2.3" \
+ && bash -l -c "rvm --default use ruby-2.3"
+RUN bash -l -c "gem install rake bundler pry rspec guard rubocop"
+# THIS USED TO WORK BUT RVM HAS A BUG
+# && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop
+RUN echo >> ~/.zshrc \
+ && echo "# Source rvm" >> ~/.zshrc \
+ && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
 
