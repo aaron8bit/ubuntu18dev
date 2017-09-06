@@ -26,7 +26,7 @@ RUN yum install -y ansible
 RUN yum install -y java-1.8.0-openjdk
 
 # Copy install files
-COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_0.7.2_linux_amd64.zip terraform_0.9.4_linux_amd64.zip /tmp/
+COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_0.7.2_linux_amd64.zip terraform_0.10.3_linux_amd64.zip /tmp/
 
 # Install Maven 3.3.9
 RUN cd /opt \
@@ -57,11 +57,11 @@ RUN cd /opt \
 
 # Install Terraform
 RUN cd /opt \
- && mkdir terraform_0.9.4 \
- && unzip -q /tmp/terraform_0.9.4_linux_amd64.zip -d terraform_0.9.4/ \
- && rm /tmp/terraform_0.9.4_linux_amd64.zip \
- && chmod -R 755 terraform_0.9.4/ \
- && ln -s terraform_0.9.4 terraform \
+ && mkdir terraform_0.10.3 \
+ && unzip -q /tmp/terraform_0.10.3_linux_amd64.zip -d terraform_0.10.3/ \
+ && rm /tmp/terraform_0.10.3_linux_amd64.zip \
+ && chmod -R 755 terraform_0.10.3/ \
+ && ln -s terraform_0.10.3 terraform \
  && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
@@ -96,6 +96,8 @@ RUN pip install awscli --upgrade --user \
  && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
  && echo "export PATH" >> ~/.zshrc
 
+# I hate having this layer last but it runs as non-root and seems to break a lot
+#
 # Install rvm
 # Why does the rvm install hate zsh? bash works fine...
 # TODO: Make this a multi-user install and put source into /etc/profile.d/

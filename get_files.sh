@@ -40,12 +40,12 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-if [[ ! -f terraform_0.9.4_linux_amd64.zip ]]; then
-  echo "Getting terraform 0.9.4"
-  curl -fsSLO https://releases.hashicorp.com/terraform/0.9.4/terraform_0.9.4_linux_amd64.zip
-  curl -fsSLO https://releases.hashicorp.com/terraform/0.9.4/terraform_0.9.4_SHA256SUMS
+if [[ ! -f terraform_0.10.3_linux_amd64.zip ]]; then
+  echo "Getting terraform 0.10.3"
+  curl -fsSLO https://releases.hashicorp.com/terraform/0.10.3/terraform_0.10.3_linux_amd64.zip
+  curl -fsSLO https://releases.hashicorp.com/terraform/0.10.3/terraform_0.10.3_SHA256SUMS
 fi
-grep linux_amd64 terraform_0.9.4_SHA256SUMS | shasum --algorithm 256 --check -
+grep linux_amd64 terraform_0.10.3_SHA256SUMS | shasum --algorithm 256 --check -
 if [[ $? -ne 0 ]]; then
   echo "ERROR: checksum failed"
   cd ${PWD}
