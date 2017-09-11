@@ -13,7 +13,9 @@ RUN yum install -y \
   git \
   sudo \
   docker \
-  jq
+  jq \
+  tree \
+  ack
 
 # Add EPEL Repos
 RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm \
