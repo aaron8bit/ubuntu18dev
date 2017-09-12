@@ -13,7 +13,6 @@ RUN yum install -y \
   git \
   sudo \
   docker \
-  jq \
   tree \
   ack
 
@@ -22,7 +21,7 @@ RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-
  && yum updateinfo
 
 # Install Ansible
-RUN yum install -y ansible
+RUN yum install -y ansible jq
 
 # Install Java 1.8
 RUN yum install -y java-1.8.0-openjdk
