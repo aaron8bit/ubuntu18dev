@@ -15,9 +15,11 @@ exec docker run \
      --rm=true \
      --net=host \
      --volume=/etc/localtime:/etc/localtime \
-     --volume=${HOME}/.ssh:/home/aja/.ssh:ro \
-     --volume=${HOME}/repos:/home/aja/repos \
-     --workdir=/home/aja/repos \
+     --volume=${HOME}/.ssh:/home/aaron/.ssh \
+     --volume=${HOME}/repos:/home/aaron/repos \
+     --volume=${HOME}/docker:/home/aaron/docker \
+     --volume=${HOME}/tmp:/home/aaron/tmp \
+     --workdir=/home/aaron \
      ${IMAGE}:${IMAGE_TAG} \
      zsh 
 

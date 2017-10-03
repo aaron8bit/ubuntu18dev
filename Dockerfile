@@ -74,11 +74,11 @@ RUN yum install -y python-pip python34-pip \
 # Use zsh while running commands
 SHELL ["/bin/zsh", "-c"]
 
-RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aja -s /bin/zsh -m aja \
- && echo 'aja ALL=NOPASSWD:ALL' >> /etc/sudoers
+RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aaron -s /bin/zsh -m aaron \
+ && echo 'aaron ALL=NOPASSWD:ALL' >> /etc/sudoers
 
 # Everything else should be non-root
-USER aja
+USER aaron
 
 # Setup oh-my-zsh
 COPY install_ohmyzsh.sh aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
