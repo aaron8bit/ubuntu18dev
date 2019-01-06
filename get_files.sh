@@ -28,24 +28,24 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-if [[ ! -f vault_0.7.2_linux_amd64.zip ]]; then
-  echo "Getting vault 0.7.2"
-  curl -fsSLO https://releases.hashicorp.com/vault/0.7.2/vault_0.7.2_linux_amd64.zip
-  curl -fsSLO https://releases.hashicorp.com/vault/0.7.2/vault_0.7.2_SHA256SUMS
+if [[ ! -f vault_1.0.1_linux_amd64.zip ]]; then
+  echo "Getting vault 1.0.1"
+  curl -fsSLO https://releases.hashicorp.com/vault/1.0.1/vault_1.0.1_linux_amd64.zip
+  curl -fsSLO https://releases.hashicorp.com/vault/1.0.1/vault_1.0.1_SHA256SUMS
 fi
-grep linux_amd64 vault_0.7.2_SHA256SUMS | shasum --algorithm 256 --check -
+grep linux_amd64 vault_1.0.1_SHA256SUMS | shasum --algorithm 256 --check -
 if [[ $? -ne 0 ]]; then
   echo "ERROR: checksum failed"
   cd ${PWD}
   exit 1
 fi
 
-if [[ ! -f terraform_0.11.10_linux_amd64.zip ]]; then
-  echo "Getting terraform 0.11.10"
-  curl -fsSLO https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
-  curl -fsSLO https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_SHA256SUMS
+if [[ ! -f terraform_0.11.11_linux_amd64.zip ]]; then
+  echo "Getting terraform 0.11.11"
+  curl -fsSLO https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip
+  curl -fsSLO https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_SHA256SUMS
 fi
-grep linux_amd64 terraform_0.11.10_SHA256SUMS | shasum --algorithm 256 --check -
+grep linux_amd64 terraform_0.11.11_SHA256SUMS | shasum --algorithm 256 --check -
 if [[ $? -ne 0 ]]; then
   echo "ERROR: checksum failed"
   cd ${PWD}
