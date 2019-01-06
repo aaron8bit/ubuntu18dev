@@ -17,7 +17,7 @@ RUN yum install -y \
   ack
 
 # Add EPEL Repos
-RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm \
+RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm \
  && yum updateinfo
 
 # Install Ansible
@@ -27,7 +27,7 @@ RUN yum install -y ansible jq
 RUN yum install -y java-1.8.0-openjdk
 
 # Copy install files
-COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_0.7.2_linux_amd64.zip terraform_0.10.3_linux_amd64.zip /tmp/
+COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_0.7.2_linux_amd64.zip terraform_0.11.10_linux_amd64.zip /tmp/
 
 # Install Maven 3.3.9
 RUN cd /opt \
@@ -58,11 +58,11 @@ RUN cd /opt \
 
 # Install Terraform
 RUN cd /opt \
- && mkdir terraform_0.10.3 \
- && unzip -q /tmp/terraform_0.10.3_linux_amd64.zip -d terraform_0.10.3/ \
- && rm /tmp/terraform_0.10.3_linux_amd64.zip \
- && chmod -R 755 terraform_0.10.3/ \
- && ln -s terraform_0.10.3 terraform \
+ && mkdir terraform_0.11.10 \
+ && unzip -q /tmp/terraform_0.11.10_linux_amd64.zip -d terraform_0.11.10/ \
+ && rm /tmp/terraform_0.11.10_linux_amd64.zip \
+ && chmod -R 755 terraform_0.11.10/ \
+ && ln -s terraform_0.11.10 terraform \
  && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
