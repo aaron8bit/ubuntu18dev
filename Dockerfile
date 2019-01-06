@@ -97,20 +97,28 @@ RUN pip install awscli --upgrade --user \
  && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
  && echo "export PATH" >> ~/.zshrc
 
+# Install Google SDK
+RUN curl -sSL https://sdk.cloud.google.com | bash \
+ && echo "export PATH=\${PATH}:\${HOME}/google-cloud-sdk/bin" >> ~/.zshrc \
+ && echo "export PATH" >> ~/.zshrc
+
 # I hate having this layer last but it runs as non-root and seems to break a lot
 #
 # Install rvm
 # Why does the rvm install hate zsh? bash works fine...
 # TODO: Make this a multi-user install and put source into /etc/profile.d/
-RUN gpg --keyserver hkp://keys.gnupg.net \
-        --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
- && curl -sSL https://get.rvm.io | bash -s stable
-RUN bash -l -c "rvm install ruby-2.3" \
- && bash -l -c "rvm --default use ruby-2.3"
-RUN bash -l -c "gem install rake bundler pry rspec guard rubocop"
+# 20190103: Remove ruby because I'm not using it and it takes forever to build
+# RUN gpg --keyserver hkp://keys.gnupg.net \
+#         --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+#  && curl -sSL https://get.rvm.io | bash -s stable
+# RUN bash -l -c "rvm install ruby-2.3" \
+#  && bash -l -c "rvm --default use ruby-2.3"
+# RUN bash -l -c "gem install rake bundler pry rspec guard rubocop"
+
 # THIS USED TO WORK BUT RVM HAS A BUG
 # && curl -sSL https://get.rvm.io | bash -s stable --ruby=ruby-2.3 --gems=bundler,pry,rspec,guard,rubocop
-RUN echo >> ~/.zshrc \
- && echo "# Source rvm" >> ~/.zshrc \
- && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
+
+#RUN echo >> ~/.zshrc \
+# && echo "# Source rvm" >> ~/.zshrc \
+# && echo "source ~/.rvm/scripts/rvm" >> ~/.zshrc
 
