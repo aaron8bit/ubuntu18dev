@@ -11,12 +11,16 @@ IMAGE_TAG="latest"
 
 exec docker run \
      -it \
+     --init \
      --hostname=DevDocker \
      --rm=true \
      --net=host \
-     --volume=/etc/localtime:/etc/localtime \
+     -e TZ=`ls -la /etc/localtime | cut -d/ -f7-8` \
+     --volume=/var/run/docker.sock:/var/run/docker.sock \
+     --volume=${HOME}/.aws:/home/aaron/.aws \
      --volume=${HOME}/.ssh:/home/aaron/.ssh \
      --volume=${HOME}/repos:/home/aaron/repos \
+     --volume=${HOME}/bin:/home/aaron/bin \
      --volume=${HOME}/docker:/home/aaron/docker \
      --volume=${HOME}/tmp:/home/aaron/tmp \
      --workdir=/home/aaron \
