@@ -52,6 +52,19 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+if [[ ! -f kops-linux-amd64 ]]; then
+  echo "Getting kops 1.11.0"
+  curl -fsSLO https://github.com/kubernetes/kops/releases/download/1.11.0/kops-linux-amd64
+  curl -fsSLO https://github.com/kubernetes/kops/releases/download/1.11.0/kops-linux-amd64-sha1
+fi
+export KOPS_SHA1=$(cat kops-linux-amd64-sha1)
+echo "${KOPS_SHA1}  kops-linux-amd64" | shasum --algorithm 1 --check -
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: checksum failed"
+  cd ${PWD}
+  exit 1
+fi
+
 if [[ ! -f install_ohmyzsh.sh ]]; then
   echo "Getting install file for oh-my-zsh"
   curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o install_ohmyzsh.sh

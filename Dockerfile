@@ -27,7 +27,7 @@ RUN yum install -y ansible jq
 RUN yum install -y java-1.8.0-openjdk
 
 # Copy install files
-COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_1.0.1_linux_amd64.zip terraform_0.11.11_linux_amd64.zip /tmp/
+COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_1.0.1_linux_amd64.zip terraform_0.11.11_linux_amd64.zip kops-linux-amd64 /tmp/
 
 # Install Maven 3.3.9
 RUN cd /opt \
@@ -65,6 +65,10 @@ RUN cd /opt \
  && ln -s terraform_0.11.11 terraform \
  && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
+
+# Install kops
+RUN cp /tmp/kops-linux-amd64 /usr/local/bin/kops \
+ && chmod 755 /usr/local/bin/kops
 
 ## Install pip
 RUN yum install -y python-pip python34-pip \
