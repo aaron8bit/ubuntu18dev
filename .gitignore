@@ -1,4 +1,5 @@
 *.zip
+*.tar
 *.gz
 *.sha1
 *.md5

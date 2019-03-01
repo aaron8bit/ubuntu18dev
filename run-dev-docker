@@ -23,6 +23,7 @@ exec docker run \
      --volume=${HOME}/bin:/home/aaron/bin \
      --volume=${HOME}/docker:/home/aaron/docker \
      --volume=${HOME}/tmp:/home/aaron/tmp \
+     --volume=${HOME}/Desktop:/home/aaron/Desktop \
      --workdir=/home/aaron \
      ${IMAGE}:${IMAGE_TAG} \
      zsh 

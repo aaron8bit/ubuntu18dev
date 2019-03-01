@@ -26,6 +26,9 @@ RUN yum install -y ansible jq
 # Install Java 1.8
 RUN yum install -y java-1.8.0-openjdk
 
+# Install Ruby
+RUN yum install -y ruby rubygems
+
 # Copy install files
 COPY apache-maven-3.3.9-bin.tar.gz gradle-3.5-all.zip vault_1.0.1_linux_amd64.zip terraform_0.11.11_linux_amd64.zip kops-linux-amd64 /tmp/
 
