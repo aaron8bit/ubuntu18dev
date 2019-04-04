@@ -74,7 +74,7 @@ RUN cp /tmp/kops-linux-amd64 /usr/local/bin/kops \
  && chmod 755 /usr/local/bin/kops
 
 ## Install pip
-RUN yum install -y python-pip python34-pip \
+RUN yum install -y python-pip python36-pip \
  && pip install --upgrade pip \
  && pip install --upgrade virtualenv
 
@@ -108,6 +108,11 @@ RUN pip install awscli --upgrade --user \
 RUN curl -sSL https://sdk.cloud.google.com | bash \
  && echo "export PATH=\${PATH}:\${HOME}/google-cloud-sdk/bin" >> ~/.zshrc \
  && echo "export PATH" >> ~/.zshrc
+
+# Install pulumi
+#RUN curl -fsSL https://get.pulumi.com | sh \
+# && echo "export PATH=\${PATH}:\${HOME}/.pulumi/bin" >> ~/.zshrc \
+# && echo "export PATH" >> ~/.zshrc
 
 # I hate having this layer last but it runs as non-root and seems to break a lot
 #
