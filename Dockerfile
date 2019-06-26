@@ -24,42 +24,25 @@ RUN apt-get install -y ansible jq
 RUN apt-get install -y ruby rubygems
 
 # Copy install files
-COPY vault_1.0.1_linux_amd64.zip terraform_0.11.11_linux_amd64.zip kops-linux-amd64 /tmp/
-
-## Install Maven 3.3.9
-#RUN cd /opt \
-# && tar xzf /tmp/apache-maven-3.3.9-bin.tar.gz \
-# && rm /tmp/apache-maven-3.3.9-bin.tar.gz \
-# && ln -s apache-maven-3.3.9 maven \
-# && echo 'export M2_HOME=/opt/maven' > /etc/profile.d/maven.sh \
-# && echo 'PATH=${PATH}:${M2_HOME}/bin' >> /etc/profile.d/maven.sh
-
-## Install gradle
-## Using a hard coded checksum because no download checksum available
-#RUN cd /opt \
-# && unzip -q /tmp/gradle-3.5-all.zip \
-# && rm /tmp/gradle-3.5-all.zip \
-# && ln -s gradle-3.5 gradle \
-# && echo 'export GRADLE_HOME=/opt/gradle' > /etc/profile.d/gradle.sh \
-# && echo 'export PATH=${PATH}:${GRADLE_HOME}/bin' >> /etc/profile.d/gradle.sh
+COPY vault_1.1.3_linux_amd64.zip terraform_0.12.3_linux_amd64.zip kops-linux-amd64 /tmp/
 
 # Install Vault
 RUN cd /opt \
- && mkdir vault_1.0.1 \
- && unzip -q /tmp/vault_1.0.1_linux_amd64.zip -d vault_1.0.1/ \
- && rm /tmp/vault_1.0.1_linux_amd64.zip \
- && chmod -R 755 vault_1.0.1/ \
- && ln -s vault_1.0.1 vault \
+ && mkdir vault_1.1.3 \
+ && unzip -q /tmp/vault_1.1.3_linux_amd64.zip -d vault_1.1.3/ \
+ && rm /tmp/vault_1.1.3_linux_amd64.zip \
+ && chmod -R 755 vault_1.1.3/ \
+ && ln -s vault_1.1.3 vault \
  && echo 'export VAULT_HOME=/opt/vault' > /etc/profile.d/vault.sh \
  && echo 'PATH=${PATH}:${VAULT_HOME}' >> /etc/profile.d/vault.sh
 
 # Install Terraform
 RUN cd /opt \
- && mkdir terraform_0.11.11 \
- && unzip -q /tmp/terraform_0.11.11_linux_amd64.zip -d terraform_0.11.11/ \
- && rm /tmp/terraform_0.11.11_linux_amd64.zip \
- && chmod -R 755 terraform_0.11.11/ \
- && ln -s terraform_0.11.11 terraform \
+ && mkdir terraform_0.12.3 \
+ && unzip -q /tmp/terraform_0.12.3_linux_amd64.zip -d terraform_0.12.3/ \
+ && rm /tmp/terraform_0.12.3_linux_amd64.zip \
+ && chmod -R 755 terraform_0.12.3/ \
+ && ln -s terraform_0.12.3 terraform \
  && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
