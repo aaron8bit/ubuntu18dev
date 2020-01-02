@@ -4,5 +4,8 @@
 *.sha1
 *.md5
 *_SHA256SUMS
+*.sig
+*.sig.pub
 kops-linux-amd64*
 kubectl-linux-amd64*
+build_docker.env

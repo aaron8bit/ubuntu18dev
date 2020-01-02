@@ -1,12 +1,22 @@
 FROM ubuntu:18.04
 MAINTAINER Aaron Albert <aaron8bit@gmail.com>
 
+ARG TERRAFORM_VER
+ARG TERRAFORM_DST
+ARG VAULT_VER
+ARG VAULT_DST
+ARG KOPS_VER
+ARG KOPS_DST
+ARG AWS_VER
+ARG AWS_DST
+
 # Update CentOS
 RUN apt-get update \
  && apt-get upgrade -y
 
 # Install some basic tools
-RUN apt-get install -y \
+RUN apt-get update \
+ && apt-get install -y \
   zsh \
   tmux \
   git \
@@ -14,62 +24,55 @@ RUN apt-get install -y \
   docker \
   tree \
   ack \
-  curl
+  curl \
+  vim \
+  wget \
+  groff
 
-# Install Ansible
+## Install python and pip
+RUN apt-get install -y python3 python3-pip \
+ && pip3 install --upgrade pip
+ #&& pip install --upgrade virtualenv
+
+# Install ansible
 RUN apt-get install -y ansible jq
 
-# Install Ruby
+# Install ruby
 RUN apt-get install -y ruby rubygems
 
 # Copy install files
-COPY vault_1.0.1_linux_amd64.zip terraform_0.11.11_linux_amd64.zip kops-linux-amd64 /tmp/
+COPY ${VAULT_DST} ${TERRAFORM_DST} ${KOPS_DST} ${AWS_DST} /tmp/
+#COPY vault_1.1.3_linux_amd64.zip terraform_0.12.3_linux_amd64.zip kops-linux-amd64 /tmp/
 
-## Install Maven 3.3.9
-#RUN cd /opt \
-# && tar xzf /tmp/apache-maven-3.3.9-bin.tar.gz \
-# && rm /tmp/apache-maven-3.3.9-bin.tar.gz \
-# && ln -s apache-maven-3.3.9 maven \
-# && echo 'export M2_HOME=/opt/maven' > /etc/profile.d/maven.sh \
-# && echo 'PATH=${PATH}:${M2_HOME}/bin' >> /etc/profile.d/maven.sh
-
-## Install gradle
-## Using a hard coded checksum because no download checksum available
-#RUN cd /opt \
-# && unzip -q /tmp/gradle-3.5-all.zip \
-# && rm /tmp/gradle-3.5-all.zip \
-# && ln -s gradle-3.5 gradle \
-# && echo 'export GRADLE_HOME=/opt/gradle' > /etc/profile.d/gradle.sh \
-# && echo 'export PATH=${PATH}:${GRADLE_HOME}/bin' >> /etc/profile.d/gradle.sh
-
-# Install Vault
+# Install vault
 RUN cd /opt \
- && mkdir vault_1.0.1 \
- && unzip -q /tmp/vault_1.0.1_linux_amd64.zip -d vault_1.0.1/ \
- && rm /tmp/vault_1.0.1_linux_amd64.zip \
- && chmod -R 755 vault_1.0.1/ \
- && ln -s vault_1.0.1 vault \
+ && mkdir vault_${VAULT_VER} \
+ && unzip -q /tmp/${VAULT_DST} -d vault_${VAULT_VER}/ \
+ && rm /tmp/${VAULT_DST} \
+ && chmod -R 755 vault_${VAULT_VER}/ \
+ && ln -s vault_${VAULT_VER} vault \
  && echo 'export VAULT_HOME=/opt/vault' > /etc/profile.d/vault.sh \
  && echo 'PATH=${PATH}:${VAULT_HOME}' >> /etc/profile.d/vault.sh
 
-# Install Terraform
+# Install terraform
 RUN cd /opt \
- && mkdir terraform_0.11.11 \
- && unzip -q /tmp/terraform_0.11.11_linux_amd64.zip -d terraform_0.11.11/ \
- && rm /tmp/terraform_0.11.11_linux_amd64.zip \
- && chmod -R 755 terraform_0.11.11/ \
- && ln -s terraform_0.11.11 terraform \
+ && mkdir terraform_${TERRAFORM_VER} \
+ && unzip -q /tmp/${TERRAFORM_DST} -d terraform_${TERRAFORM_VER}/ \
+ && rm /tmp/${TERRAFORM_DST} \
+ && chmod -R 755 terraform_${TERRAFORM_VER}/ \
+ && ln -s terraform_${TERRAFORM_VER} terraform \
  && echo 'export TERRAFORM_HOME=/opt/terraform' > /etc/profile.d/terraform.sh \
  && echo 'PATH=${PATH}:${TERRAFORM_HOME}' >> /etc/profile.d/terraform.sh
 
 # Install kops
-RUN cp /tmp/kops-linux-amd64 /usr/local/bin/kops \
+RUN cp /tmp/${KOPS_DST} /usr/local/bin/kops \
  && chmod 755 /usr/local/bin/kops
 
-## Install pip
-RUN apt-get install -y python3 python3-pip \
- && pip3 install --upgrade pip
- #&& pip install --upgrade virtualenv
+# Install aws cli
+RUN cd /opt \
+ && mkdir aws \
+ && unzip /tmp/${AWS_DST} \
+ && /opt/aws/install
 
 # Use zsh while running commands
 SHELL ["/bin/zsh", "-c"]
@@ -81,7 +84,7 @@ RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aaron -s /bin/zsh -m aar
 USER aaron
 
 # Setup oh-my-zsh
-COPY install_ohmyzsh.sh aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
+COPY aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
 # the install exits with 1 but seems to work fine
 RUN sudo apt-get install -y powerline fonts-powerline
 RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
@@ -92,15 +95,15 @@ RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
  && sed -i 's/# CASE_SENSITIVE="true"/CASE_SENSITIVE="true"/g' ~/.zshrc
 
 # Install AWS CLI tools
-RUN pip3 install awscli --upgrade --user \
- && echo "# User specific environment and startup programs" >> ~/.zshrc \
- && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
- && echo "export PATH" >> ~/.zshrc
+#RUN pip3 install awscli --upgrade --user \
+# && echo "# User specific environment and startup programs" >> ~/.zshrc \
+# && echo "export PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin" >> ~/.zshrc \
+# && echo "export PATH" >> ~/.zshrc
 
 # Install Google SDK
-RUN curl -sSL https://sdk.cloud.google.com | bash \
- && echo "export PATH=\${PATH}:\${HOME}/google-cloud-sdk/bin" >> ~/.zshrc \
- && echo "export PATH" >> ~/.zshrc
+#RUN curl -sSL https://sdk.cloud.google.com | bash \
+# && echo "export PATH=\${PATH}:\${HOME}/google-cloud-sdk/bin" >> ~/.zshrc \
+# && echo "export PATH" >> ~/.zshrc
 
 # Install pulumi
 #RUN curl -fsSL https://get.pulumi.com | sh \
