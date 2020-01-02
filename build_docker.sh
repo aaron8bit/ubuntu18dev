@@ -5,7 +5,8 @@ THIS_DIRECTORY=$(cd $(dirname ${THIS_SCRIPT}) && pwd)
 
 REPOSITORY="aaron8bit"
 IMAGE_NAME="ubuntu18dev"
-IMAGE="${REPOSITORY}/${IMAGE_NAME}"
+#IMAGE="${REPOSITORY}/${IMAGE_NAME}"
+IMAGE="${IMAGE_NAME}"
 
 VERSION=$(cat ${THIS_DIRECTORY}/.version)
 DATE_STAMP=$(date +%Y%m%d-%H%M)
