@@ -4,7 +4,7 @@ THIS_SCRIPT=${BASH_SOURCE[0]}
 THIS_DIRECTORY=$(cd $(dirname ${THIS_SCRIPT}) && pwd)
 
 REPOSITORY="aaron8bit"
-IMAGE_NAME="centos7dev"
+IMAGE_NAME="ubuntu18dev"
 IMAGE="${REPOSITORY}/${IMAGE_NAME}"
 
 IMAGE_TAG="latest"
