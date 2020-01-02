@@ -8,3 +8,4 @@
 *.sig.pub
 kops-linux-amd64*
 kubectl-linux-amd64*
+build_docker.env
