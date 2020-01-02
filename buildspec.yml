@@ -12,7 +12,7 @@ phases:
   build:
     commands:
       - echo build Docker image on `date`
-      - build_docker.sh
+      - ./build_docker.sh
       - docker tag ubuntu18dev:latest 848709993432.dkr.ecr.us-east-2.amazonaws.com/ubuntu18dev:latest
   post_build:
     commands:
