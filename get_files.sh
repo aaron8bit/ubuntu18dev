@@ -17,6 +17,7 @@ function get_files {
     curl -fsSL ${file_url}/${file_src} -o ${file_dst}
     echo "  curl -fsSLO ${file_url}/${file_sha}"
     curl -fsSLO ${file_url}/${file_sha}
+    CHANGED=0
   fi
 }
 
@@ -41,9 +42,13 @@ function check_version_format {
 }
 
 function export_vars {
+  if [[ -e "build_docker.env" ]]; then
+    rm build_docker.env
+  fi
   for var in TERRAFORM_VER TERRAFORM_DST VAULT_VER VAULT_DST KOPS_VER KOPS_DST AWS_VER AWS_DST
   do
-    echo "export ${var}=$(eval echo \$${var})"
+    #echo "export ${var}=$(eval echo \$${var})"
+    echo "${var}=$(eval echo \$${var})" >> build_docker.env
   done
 }
 
@@ -110,8 +115,11 @@ exit_on_failed_checksum awscli $?
 gpg --verify ${AWS_GPG} ${AWS_DST}
 exit_on_failed_checksum awscli $?
 
+if [[ ${CHANGED} ]]; then
+  export_vars
+fi
+
 cd ${PWD}
 echo "SUCCESS: all files present and verified"
 echo
-export_vars
 
