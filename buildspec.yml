@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - echo install step...
+  pre_build:
+    commands:
+      - echo logging in to AWS ECR...
+      - $(aws ecr get-login --no-include-email --region us-east-2)
+  build:
+    commands:
+      - echo build Docker image on `date`
+      - cd src
+      - docker build -t ubuntu18dev:latest .
+      - docker tag ubuntu18dev:latest 848709993432.dkr.ecr.us-east-2.amazonaws.com/ubuntu18dev:latest
+  post_build:
+    commands:
+      - echo build Docker image complete `date`
+      - echo push latest Docker images to ECR...
+      - docker push 848709993432.dkr.ecr.us-east-2.amazonaws.com/ubuntu18dev:latest
