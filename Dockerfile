@@ -15,7 +15,8 @@ RUN apt-get install -y \
   tree \
   ack \
   curl \
-  vim
+  vim \
+  wget
 
 # Install Ansible
 RUN apt-get install -y ansible jq
@@ -65,7 +66,7 @@ RUN useradd -u 1000 -g users -c 'Aaron Albert' -d /home/aaron -s /bin/zsh -m aar
 USER aaron
 
 # Setup oh-my-zsh
-COPY install_ohmyzsh.sh aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
+COPY aaron8bit.zsh-theme aaron8bit2.zsh-theme /tmp/
 # the install exits with 1 but seems to work fine
 RUN sudo apt-get install -y powerline fonts-powerline
 RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
