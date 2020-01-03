@@ -5,7 +5,8 @@ THIS_DIRECTORY=$(cd $(dirname ${THIS_SCRIPT}) && pwd)
 
 REPOSITORY="aaron8bit"
 IMAGE_NAME="ubuntu18dev"
-IMAGE="${REPOSITORY}/${IMAGE_NAME}"
+#IMAGE="${REPOSITORY}/${IMAGE_NAME}"
+IMAGE="${IMAGE_NAME}"
 
 IMAGE_TAG="latest"
 
@@ -15,7 +16,7 @@ exec docker run \
      --hostname=DevDocker \
      --rm=true \
      --net=host \
-     -e TZ=`ls -la /etc/localtime | cut -d/ -f7-8` \
+     -e TZ=`ls -la /etc/localtime | cut -d/ -f8-9` \
      --volume=/var/run/docker.sock:/var/run/docker.sock \
      --volume=${HOME}/.aws:/home/aaron/.aws \
      --volume=${HOME}/.ssh:/home/aaron/.ssh \
